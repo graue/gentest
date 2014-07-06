@@ -1,0 +1,20 @@
+{
+  "name": "gentest",
+  "version": "0.0.1",
+  "description": "Generative testing lib",
+  "keywords": ["test", "testing", "quickcheck"],
+  "homepage": "https://github.com/graue/gentest",
+  "bugs": "https://github.com/graue/gentest/issues",
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/graue/gentest.git"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "mocha": "~1.18.2"
+  }
+}
