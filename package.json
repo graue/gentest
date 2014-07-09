@@ -16,5 +16,8 @@
   },
   "devDependencies": {
     "mocha": "~1.18.2"
+  },
+  "dependencies": {
+    "burtleprng": "~0.1.0"
   }
 }
