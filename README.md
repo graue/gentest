@@ -112,8 +112,7 @@ And these higher-order type definitions:
 
 You'll want to write your own type definitions for any type not built
 into JavaScript, and thus, not specified in gentest. It's easy! You
-just create an object with a method called `arbitrary`. This method
-takes no arguments and returns a random instance of your type.
+just use `arrayOf`, `oneOf` and `shape` to compose primitive types.
 
-Alternatively, use `arrayOf`, `oneOf` and `shape` to compose primitive
-types. For example, TODO think of an example to put here
+Eventually, we will need fmap, suchThat and other similar stuff,
+because this isn't enough, but for now, that's it!
