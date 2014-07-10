@@ -105,8 +105,11 @@ And these higher-order type definitions:
 
 * `arrayOf(type)`
 * `oneOf(types)`: may be any of the given types
+* `elements(elems)`: may be any of the given elems
 * `shape(object)`: object, with each key mapped to a value of the
   respective type
+* `fmap(fun, type)`: maps fun over each generated object of the given
+  type
 
 ### Writing your own type definitions
 
