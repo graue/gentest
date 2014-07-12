@@ -1,4 +1,5 @@
 exports.run = require('./lib/run');
+exports.sample = require('./lib/sample');
 exports.types = require('./lib/types');
 
 var errors = require('./lib/errors');
