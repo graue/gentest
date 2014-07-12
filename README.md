@@ -81,7 +81,7 @@ Runs `numTests` test cases against `property`, passing in arguments
 with each of the `argumentTypes`. If `numTests` is not provided, it
 defaults to 100.
 
-Throws a GentestFailure error if a test fails. The error object will
+Throws a gentest.FailureError if a test fails. The error object will
 have a `testCase` attribute that holds an array of all the generated
 arguments that led to the failing test.
 
