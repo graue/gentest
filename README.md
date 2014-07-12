@@ -1,8 +1,6 @@
 # gentest
 
-Property-based, generative testing for JavaScript (inspired by
-Haskell's
-[QuickCheck](http://www.haskell.org/haskellwiki/Introduction_to_QuickCheck2)).
+Property-based, generative testing for JavaScript.
 
 Don't handwrite unit tests. Save time and catch more bugs by writing
 properties, and let the computer generate test cases for you!
@@ -40,11 +38,7 @@ gentest.run(prop_isCommutative,
             gentest.types.number /* type of y */);
 ```
 
-Output:
-
-```
-+++ OK, passed 100 tests.
-```
+gentest then runs 100 tests, and complains if any of them fail.
 
 
 ## Integrating with test frameworks
@@ -85,6 +79,10 @@ Throws a gentest.FailureError if a test fails. The error object will
 have a `testCase` attribute that holds an array of all the generated
 arguments that led to the failing test.
 
+### gentest.sample(type, [count])
+
+Generates sample values of the given type.
+
 ### gentest.types
 
 Contains the following type definitions, with built-in generators:
@@ -101,21 +99,134 @@ Contains the following type definitions, with built-in generators:
 * `string`
 * `bool`
 
+
+```javascript
+gentest.sample(gentest.types.int);
+// -> [ 0, 0, -1, 1, 0, 2, -2, 1, -2, -4 ]
+
+gentest.sample(gentest.types.string);
+// -> [ '', '', '', 'V', 'N', '{C', '(P', 'jb', 'I{=y', 'Ss' ]
+```
+
 And these higher-order type definitions:
 
-* `arrayOf(type)`
-* `oneOf(types)`: may be any of the given types
-* `elements(elems)`: may be any of the given elems
-* `shape(object)`: object, with each key mapped to a value of the
-  respective type
-* `fmap(fun, type)`: maps fun over each generated object of the given
-  type
+### arrayOf(type)
 
-### Writing your own type definitions
+Produces arrays of the argument type.
 
-You'll want to write your own type definitions for any type not built
-into JavaScript, and thus, not specified in gentest. It's easy! You
-just use `arrayOf`, `oneOf` and `shape` to compose primitive types.
+```javascript
+gentest.sample(gentest.types.arrayOf(gentest.types.bool));
+// ->
+// [ [],
+//   [],
+//   [ false ],
+//   [ false ],
+//   [ false ],
+//   [ false ],
+//   [ false, true, true ],
+//   [ true, true, true ],
+//   [ false,
+//     false,
+//     true,
+//     true ],
+//   [] ]
+```
 
-Eventually, we will need fmap, suchThat and other similar stuff,
-because this isn't enough, but for now, that's it!
+### oneOf(types)
+
+Produces any of the given types.
+
+```
+gentest.sample(gentest.types.oneOf([gentest.types.bool, gentest.types.int]));
+// ->
+// [ 0,
+//   true,
+//   1,
+//   false,
+//   true,
+//   true,
+//   true,
+//   -1,
+//   0,
+//   -4 ]
+```
+
+### elements(elems)
+
+Any of the given elements.
+
+```javascript
+var foods = gentest.types.elements(['pizza', 'chocolate', 'sushi']);
+gentest.sample(foods);
+// ->
+// [ 'sushi',
+//   'pizza',
+//   'pizza',
+//   'chocolate',
+//   'sushi',
+//   'pizza',
+//   'chocolate',
+//   'chocolate',
+//   'chocolate',
+//   'sushi' ]
+```
+
+### shape(object)
+
+Produces objects, with each key mapped to a value of the respective
+type.
+
+```javascript
+var person = gentest.types.shape({
+  name: gentest.types.string,
+  age: gentest.types.int.positive
+});
+gentest.sample(person);
+// ->
+// [ { name: '', age: 1 },
+//   { name: '', age: 1 },
+//   { name: 'y', age: 1 },
+//   { name: '$', age: 2 },
+//   { name: 'v', age: 3 },
+//   { name: '~', age: 2 },
+//   { name: 'vA', age: 2 },
+//   { name: 'u', age: 4 },
+//   { name: 'QWb', age: 2 },
+//   { name: '5,r', age: 3 } ]
+```
+
+### fmap(fun, type)
+
+Maps a function over the generated values of the given type.
+
+```javascript
+var powersOfTwo = gentest.types.fmap(function(n) {
+  return Math.pow(2, n);
+}, gentest.types.int.nonNegative);
+
+gentest.sample(powersOfTwo);
+// -> [ 1, 1, 2, 2, 8, 4, 16, 32, 8, 2 ]
+```
+
+### suchThat(pred, type, [maxTries])
+
+Produces values of `type` that pass the predicate `pred`. This should
+be a predicate that will pass most of the time; you can't use this to
+select for relatively rare values like prime numbers, perfect squares,
+strings with balanced parentheses, etc.
+
+This is used internally to implement `int.nonZero`:
+
+```javascript
+function isNonzero(x) {
+  return x !== 0;
+}
+t.int.nonZero = t.suchThat(isNonzero, t.int);
+```
+
+
+## Credits
+
+gentest is heavily influenced by
+[QuickCheck](http://www.haskell.org/haskellwiki/Introduction_to_QuickCheck2)
+and [test.check](https://github.com/clojure/test.check).
