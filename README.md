@@ -136,7 +136,7 @@ gentest.sample(gentest.types.arrayOf(gentest.types.bool));
 
 Produces any of the given types.
 
-```
+```javascript
 gentest.sample(gentest.types.oneOf([gentest.types.bool, gentest.types.int]));
 // ->
 // [ 0,
