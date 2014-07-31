@@ -132,6 +132,26 @@ gentest.sample(gentest.types.arrayOf(gentest.types.bool));
 //   [] ]
 ```
 
+#### tuple(types)
+
+Produces arrays that have one each of the given types, in order.
+
+```javascript
+var t = gentest.types;
+gentest.sample(t.tuple([t.int, t.int, t.bool, t.string]))
+// ->
+// [ [ -1, -1, true, '' ],
+//   [ 0, 0, true, 'B' ],
+//   [ 2, 1, true, '!B' ],
+//   [ 0, 0, true, '' ],
+//   [ 2, 2, false, '\'D' ],
+//   [ 2, 2, true, '@+' ],
+//   [ 3, 1, true, '7gR]' ],
+//   [ -2, 0, true, 'Z' ],
+//   [ 0, -4, false, 'rr$:' ],
+//   [ 5, 4, true, '' ] ]
+```
+
 #### oneOf(types)
 
 Produces any of the given types.
