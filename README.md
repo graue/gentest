@@ -110,7 +110,7 @@ gentest.sample(gentest.types.string);
 
 And these higher-order type definitions:
 
-### arrayOf(type)
+#### arrayOf(type)
 
 Produces arrays of the argument type.
 
@@ -132,7 +132,7 @@ gentest.sample(gentest.types.arrayOf(gentest.types.bool));
 //   [] ]
 ```
 
-### oneOf(types)
+#### oneOf(types)
 
 Produces any of the given types.
 
@@ -151,7 +151,7 @@ gentest.sample(gentest.types.oneOf([gentest.types.bool, gentest.types.int]));
 //   -4 ]
 ```
 
-### elements(elems)
+#### elements(elems)
 
 Any of the given elements.
 
@@ -171,7 +171,7 @@ gentest.sample(foods);
 //   'sushi' ]
 ```
 
-### shape(object)
+#### shape(object)
 
 Produces objects, with each key mapped to a value of the respective
 type.
@@ -195,7 +195,7 @@ gentest.sample(person);
 //   { name: '5,r', age: 3 } ]
 ```
 
-### fmap(fun, type)
+#### fmap(fun, type)
 
 Maps a function over the generated values of the given type.
 
@@ -208,7 +208,7 @@ gentest.sample(powersOfTwo);
 // -> [ 1, 1, 2, 2, 8, 4, 16, 32, 8, 2 ]
 ```
 
-### suchThat(pred, type, [maxTries])
+#### suchThat(pred, type, [maxTries])
 
 Produces values of `type` that pass the predicate `pred`. This should
 be a predicate that will pass most of the time; you can't use this to
