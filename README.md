@@ -79,6 +79,12 @@ Throws a gentest.FailureError if a test fails. The error object will
 have a `testCase` attribute that holds an array of all the generated
 arguments that led to the failing test.
 
+In many cases, gentest can "shrink" a failing test case to produce a
+smaller one. If this happens, the `testCase` attribute will be the
+minimal test case gentest was able to come up with, and the
+`originalTestCase` attribute will hold the original, un-shrunk test
+case that was generated at random.
+
 ### gentest.sample(type, [count])
 
 Generates sample values of the given type.
