@@ -18,7 +18,7 @@ function add(x, y) {
 
 We can begin by asking, "What properties should this function have?"
 One property is that it's commutative; `add(x, y)` should equal
-`add(y, x)` for any numbers x and y. To test this, we write a function
+`add(y, x)` for any integers x and y. To test this, we write a function
 that accepts a *particular* pair of values for x and y, and returns
 true if the property holds for those inputs:
 
@@ -34,8 +34,8 @@ property, and a description of the types of the property's arguments
 
 ```javascript
 gentest.run(prop_isCommutative,
-            gentest.types.number /* type of x */,
-            gentest.types.number /* type of y */);
+            gentest.types.int /* type of x */,
+            gentest.types.int /* type of y */);
 ```
 
 gentest then runs 100 tests, and complains if any of them fail.
@@ -61,7 +61,7 @@ describe('addition', function() {
       return add(x, y) === add(y, x);
     };
 
-    gentest.run(prop_isCommutative, t.number, t.number);
+    gentest.run(prop_isCommutative, t.int, t.int);
   });
 });
 ```
@@ -87,10 +87,6 @@ Generates sample values of the given type.
 
 Contains the following type definitions, with built-in generators:
 
-* `number`
-* `number.nonNegative`
-* `number.nonZero`
-* `number.positive`
 * `int`
 * `int.nonNegative`
 * `int.nonZero`
