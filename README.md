@@ -5,6 +5,10 @@ Property-based, generative testing for JavaScript.
 Don't handwrite unit tests. Save time and catch more bugs by writing
 properties, and let the computer generate test cases for you!
 
+(This is a work in progress. Consider it "[Stability 1:
+Experimental](http://nodejs.org/api/documentation.html)" for the time
+being. Feedback welcome.)
+
 
 ## Basic example
 
