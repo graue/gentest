@@ -132,6 +132,15 @@ describe('elements', function() {
   });
 });
 
+describe('constantly', function() {
+  it('always returns the given value', function() {
+    var xs = gentest.sample(t.constantly('x'), 1000);
+    assert(xs.every(function(x) {
+      return x === 'x';
+    }));
+  });
+});
+
 describe('shape', function() {
   it('produces objects given a template', function() {
     var template = {

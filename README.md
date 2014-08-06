@@ -177,6 +177,10 @@ gentest.sample(gentest.types.oneOf([gentest.types.bool, gentest.types.int]));
 //   -4 ]
 ```
 
+#### constantly(x)
+
+Returns a generator that always yields the constant value `x`.
+
 #### elements(elems)
 
 Any of the given elements.
@@ -255,7 +259,7 @@ var arrayAndElement = t.bind(
   // an element selected from the array, together with the array
   // itself.
   function(ints) {
-    return t.tuple([t.elements(ints), t.elements([ints])]);
+    return t.tuple([t.elements(ints), t.constantly(ints)]);
   }
 );
 
