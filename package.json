@@ -23,5 +23,13 @@
   },
   "bin": {
     "gentest": "./bin/gentest.js"
-  }
+  },
+  "files": [
+    "index.js",
+    "CHANGELOG.md",
+    "README.md",
+    "LICENSE.txt",
+    "bin",
+    "lib"
+  ]
 }
