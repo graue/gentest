@@ -22,72 +22,46 @@ function add(x, y) {
 
 We can begin by asking, "What properties should this function have?"
 One property is that it's commutative; `add(x, y)` should equal
-`add(y, x)` for any integers x and y. To test this, we write a function
-that accepts a *particular* pair of values for x and y, and returns
-true if the property holds for those inputs:
+`add(y, x)` for any integers x and y. To test this, we could write a
+function that accepts a *particular* pair of values for x and y, and
+returns true if the property holds for those inputs:
 
 ```javascript
-var prop_isCommutative = function(x, y) {
+var ourProperty = function(x, y) {
   return add(x, y) === add(y, x);
 };
 ```
 
-Now, to test the property we call `gentest.run`, passing it the
-property, and a description of the types of the property's arguments
-(`x` and `y`):
+Such a function is called a **property** in Gentest, but we're not
+quite finished. We also need to tell Gentest what `x` and `y` are so
+it can generate sample values. For now, let's restrict our input
+domain to integers, which we can create using the `gentest.types.int`
+generator.
 
 ```javascript
-gentest.run(prop_isCommutative,
-            gentest.types.int /* type of x */,
-            gentest.types.int /* type of y */);
-```
-
-gentest then runs 100 tests, and complains if any of them fail.
-
-
-## Integrating with test frameworks
-
-gentest plays well with test frameworks. Here's a complete version of
-the above example combined with
-[Mocha](http://visionmedia.github.io/mocha/)'s BDD interface.
-
-```javascript
-var gentest = require('gentest');
 var t = gentest.types;
 
-function add(x, y) {
-  return x + y;
-}
-
-describe('addition', function() {
-  it('is commutative', function() {
-    var prop_isCommutative = function(x, y) {
-      return add(x, y) === add(y, x);
-    };
-
-    gentest.run(prop_isCommutative, t.int, t.int);
-  });
-});
+forAll([t.int, t.int], 'addition is commutative', function(x, y) {
+  return add(x, y) === add(y, x);
+};
 ```
+
+We now have a complete example and can run the tests using the
+`gentest` executable. `npm install -g gentest`, then run `gentest`
+with your test file as an argument.
+
+
+## Concepts and terms
+
+A **property** is a parameterized test: a function that takes any
+number of arguments and returns a boolean, together with a description
+of how to generate that function's arguments.
+
+A **test** is a particular test case, that is, a set of arguments to a
+property.
 
 
 ## API
-
-### gentest.run(property, [numTests], argumentTypes...)
-
-Runs `numTests` test cases against `property`, passing in arguments
-with each of the `argumentTypes`. If `numTests` is not provided, it
-defaults to 100.
-
-Throws a gentest.FailureError if a test fails. The error object will
-have a `testCase` attribute that holds an array of all the generated
-arguments that led to the failing test.
-
-In many cases, gentest can "shrink" a failing test case to produce a
-smaller one. If this happens, the `testCase` attribute will be the
-minimal test case gentest was able to come up with, and the
-`originalTestCase` attribute will hold the original, un-shrunk test
-case that was generated at random.
 
 ### gentest.sample(type, [count])
 

@@ -18,6 +18,10 @@
     "mocha": "~1.18.2"
   },
   "dependencies": {
-    "burtleprng": "~0.1.0"
+    "burtleprng": "~0.1.0",
+    "commander": "~2.3.0"
+  },
+  "bin": {
+    "gentest": "./bin/gentest.js"
   }
 }
