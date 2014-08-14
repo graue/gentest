@@ -43,7 +43,7 @@ var t = gentest.types;
 
 forAll([t.int, t.int], 'addition is commutative', function(x, y) {
   return add(x, y) === add(y, x);
-};
+});
 ```
 
 We now have a complete example and can run the tests using the
