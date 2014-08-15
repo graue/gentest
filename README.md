@@ -265,14 +265,99 @@ be a predicate that will pass most of the time; you can't use this to
 select for relatively rare values like prime numbers, perfect squares,
 strings with balanced parentheses, etc.
 
-This is used internally to implement `int.nonZero`:
+A common use case is non-empty arrays:
 
 ```javascript
-function isNonzero(x) {
-  return x !== 0;
-}
-t.int.nonZero = t.suchThat(isNonzero, t.int);
+function isNonempty(xs) { return xs.length > 0; }
+
+var nonemptyArray = t.suchThat(
+  isNonempty,
+  t.arrayOf(t.int)
+);
 ```
+
+If you can, it's better to generate the values you want directly
+instead of filtering for them. For example, this is a not-so-great way
+to generate multiples of 3:
+
+```js
+var threesBad = t.suchThat(
+  function(n) { return n%3 === 0; },
+  t.int.nonNegative);
+```
+
+This is a better way, more reliable and efficient:
+
+```js
+var threesGood = t.fmap(
+  function(n) { return n*3; },
+  t.int.nonNegative);
+```
+
+
+## Writing your own generators
+
+A design goal of Gentest is that you as a user should never have to
+write your own generators from scratch. Instead, everything you need
+to test should be expressible in terms of the primitives above and
+the higher-order generators like `fmap` and `bind`.
+
+By doing it this way you get shrinking and repeatability of test cases
+automatically for your new types.
+
+How does this work in practice? Let's say you have a BoundingBox class
+which contains x and y coordinates, a width, and a height:
+
+```js
+var BoundingBox = function(x, y, w, h) {
+  this.x = x;
+  this.y = y;
+  this.w = w;
+  this.h = h;
+}
+BoundingBox.prototype.isColliding = function(other) { /* ... */ };
+```
+
+To make a bounding box, you essentially just need to create x, y,
+width and height values and pass them to the constructor. You can
+generate the values using `tuple`:
+
+```js
+t.tuple([t.int,          t.int,          // x, y
+         t.int.positive, t.int.positive  // width, height. We don't want
+                                         // these to be 0 or negative!
+        ]);
+```
+
+Then map a function over each generated value:
+
+```js
+var genBBox =
+  t.fmap(
+    function(tuple) {
+      return new BoundingBox(tuple[0], tuple[1], tuple[2], tuple[3]);
+    },
+    t.tuple([t.int,          t.int,
+             t.int.positive, t.int.positive]));
+```
+
+And now use `genBBox` in your properties just like a built-in type:
+
+```js
+forAll([genBBox], 'bounding boxes collide with themselves', function(bbox) {
+  return bbox.isColliding(bbox);
+});
+```
+
+Avoid calling `Math.random` in your functions, since if you do so,
+test runs won't be repeatable. All randomness should come from the
+built-in generators.
+
+If the generator you want seems impossible to write, check the
+[issues](https://github.com/graue/gentest/issues) because something
+may be missing. And feel free to ask for help. But in general, with
+`fmap` and `bind` you have a lot of power to build more sophisticated
+generators.
 
 
 ## Credits
