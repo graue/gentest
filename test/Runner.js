@@ -27,4 +27,21 @@ describe('test runner', function() {
     assert.equal(tested.length, NUM_PROPS);
     assert(tested.every(function(n) { return n === 53; }));
   });
+
+  it('selects specific tests with the grep option', function() {
+    var runner = new Runner();
+    var fooCalled = false, barCalled = false;
+    runner.newProp(Property.forAll([t.int], 'foo test', function() {
+      fooCalled = true;
+      return true;
+    }));
+    runner.newProp(Property.forAll([t.int], 'bar test', function() {
+      barCalled = true;
+      return true;
+    }));
+    runner.run({silent: true, grep: 'foo'});
+
+    assert.equal(fooCalled, true);
+    assert.equal(barCalled, false);
+  });
 });
