@@ -305,22 +305,23 @@ the higher-order generators like `fmap` and `bind`.
 By doing it this way you get shrinking and repeatability of test cases
 automatically for your new types.
 
-How does this work in practice? Let's say you have a BoundingBox class
-which contains x and y coordinates, a width, and a height:
+How does this work in practice? Let's say you have a rectangle class
+which contains x and y coordinates, a width, a height, and a method to
+test if it's colliding with another rectangle:
 
 ```js
-var BoundingBox = function(x, y, w, h) {
+var Rect = function(x, y, w, h) {
   this.x = x;
   this.y = y;
   this.w = w;
   this.h = h;
 }
-BoundingBox.prototype.isColliding = function(other) { /* ... */ };
+Rect.prototype.isColliding = function(other) { /* ... */ };
 ```
 
-To make a bounding box, you essentially just need to create x, y,
-width and height values and pass them to the constructor. You can
-generate the values using `tuple`:
+To make a `Rect`, you essentially just need to create x, y, width and
+height values and pass them to the constructor. You can generate the
+values using `tuple`:
 
 ```js
 t.tuple([t.int,          t.int,          // x, y
@@ -332,20 +333,20 @@ t.tuple([t.int,          t.int,          // x, y
 Then map a function over each generated value:
 
 ```js
-var genBBox =
+var genRect =
   t.fmap(
     function(tuple) {
-      return new BoundingBox(tuple[0], tuple[1], tuple[2], tuple[3]);
+      return new Rect(tuple[0], tuple[1], tuple[2], tuple[3]);
     },
     t.tuple([t.int,          t.int,
              t.int.positive, t.int.positive]));
 ```
 
-And now use `genBBox` in your properties just like a built-in type:
+And now use `genRect` in your properties just like a built-in type:
 
 ```js
-forAll([genBBox], 'bounding boxes collide with themselves', function(bbox) {
-  return bbox.isColliding(bbox);
+forAll([genRect], 'rectangles collide with themselves', function(rect) {
+  return rect.isColliding(rect);
 });
 ```
 
