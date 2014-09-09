@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+"use strict";
 
 var PRNG = require('burtleprng');
 var fs = require('fs');

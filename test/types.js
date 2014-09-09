@@ -1,3 +1,5 @@
+"use strict";
+
 var assert = require('assert');
 var gentest = require('../index');
 var t = gentest.types;

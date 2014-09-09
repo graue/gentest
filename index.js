@@ -1,3 +1,5 @@
+"use strict";
+
 exports.sample = require('./lib/sample');
 exports.types = require('./lib/types');
 
